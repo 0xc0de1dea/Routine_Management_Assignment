@@ -2,8 +2,10 @@ package com.example.routineManagement.date.controller;
 
 import com.example.routineManagement.date.dto.DateDto;
 import com.example.routineManagement.date.service.DateService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +17,10 @@ public class DateController {
 
     @PostMapping
     public ResponseEntity<?> createDate(
-            @Valid @RequestBody DateDto.Request request
+            @Valid @RequestBody DateDto.Request request,
+            HttpSession session
     ){
-        return ResponseEntity.ok(dateService.createDate(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(dateService.createDate(request, session));
     }
 
     @GetMapping
@@ -30,15 +33,17 @@ public class DateController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateDate(
             @PathVariable Long id,
-            @Valid @RequestBody DateDto.Request request
+            @Valid @RequestBody DateDto.Request request,
+            HttpSession session
     ){
-        return ResponseEntity.ok(dateService.updateDate(id, request));
+        return ResponseEntity.ok(dateService.updateDate(id, request, session));
     }
 
     @DeleteMapping
     public void deleteDate(
-            @RequestParam(name = "id") Long id
+            @RequestParam(name = "id") Long id,
+            HttpSession session
     ){
-        dateService.deleteDate(id);
+        dateService.deleteDate(id, session);
     }
 }

@@ -16,6 +16,6 @@ public class SignupDto {
     private String email;
 
     @NotBlank(message = "비밀번호는 빈칸일 수 없습니다.")
-    @Size(min = 6, max = 100, message = "비밀번호는 6자 이상 100자 이하입니다.")
+    @Size(min = 8, max = 100, message = "비밀번호는 8자 이상 100자 이하입니다.")
     private String password;
 }

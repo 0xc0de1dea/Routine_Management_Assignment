@@ -1,17 +1,18 @@
 package com.example.routineManagement.date.service;
 
 import com.example.routineManagement.date.dto.DateDto;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
 public interface DateService {
-    DateDto.Response createDate(DateDto.Request request);
+    DateDto.Response createDate(DateDto.Request request, HttpSession session);
 
     List<DateDto.Response> searchDateByAuthor(String author);
 
     DateDto.Response searchDateById(Long id);
 
-    DateDto.Response updateDate(Long id, DateDto.Request request);
+    DateDto.Response updateDate(Long id, DateDto.Request request, HttpSession session);
 
-    void deleteDate(Long id);
+    void deleteDate(Long id, HttpSession session);
 }
