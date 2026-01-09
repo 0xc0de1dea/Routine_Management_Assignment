@@ -1,5 +1,6 @@
 package com.example.routineManagement.user.service.impl;
 
+import com.example.routineManagement.config.PasswordEncoder;
 import com.example.routineManagement.exception.CustomException;
 import com.example.routineManagement.type.ErrorCode;
 import com.example.routineManagement.user.dto.LoginDto;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -48,7 +50,7 @@ public class UserServiceImpl implements UserService {
         User user = User.builder()
                         .name(request.getName())
                                 .email(request.getEmail())
-                                        .password(request.getPassword())
+                                        .password(passwordEncoder.encode(request.getPassword()))
                 .build();
 
         userRepository.save(user);
@@ -61,7 +63,7 @@ public class UserServiceImpl implements UserService {
                 () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
 
-        if (!user.getPassword().equals(request.getPassword())){
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())){
             throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
         }
 
