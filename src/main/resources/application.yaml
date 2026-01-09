@@ -1,3 +1,17 @@
 spring:
-  application:
-    name: routineManagement
+  datasource:
+    url: jdbc:mysql://localhost:3306/routine?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: star816438*
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        cache:
+          use_second_level_cache: false
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        use_sql_comments: true
+        default_schema: date
+    show-sql: true

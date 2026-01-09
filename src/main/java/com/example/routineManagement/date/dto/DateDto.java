@@ -1,6 +1,7 @@
 package com.example.routineManagement.date.dto;
 
 import com.example.routineManagement.date.entity.Date;
+import com.example.routineManagement.user.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -9,22 +10,11 @@ import java.time.LocalDateTime;
 public class DateDto {
     @Getter
     public static class Request {
-        @NotBlank
-        private String name;
-
-        @NotBlank
+        @NotBlank(message = "내용은 빈칸일 수 없습니다.")
         private String content;
 
-        @NotBlank
+        @NotBlank(message = "저자는 빈칸일 수 없습니다.")
         private String author;
-
-        public Date toEntity(){
-            return Date.builder()
-                    .name(this.name)
-                    .content(this.content)
-                    .author(this.author)
-                    .build();
-        }
     }
 
     @Getter
@@ -39,7 +29,7 @@ public class DateDto {
 
         public static DateDto.Response fromEntity(Date date){
             return Response.builder()
-                    .name(date.getName())
+                    .name(date.getUser().getName())
                     .content(date.getContent())
                     .author(date.getAuthor())
                     .createdAt(date.getCreatedAt())
