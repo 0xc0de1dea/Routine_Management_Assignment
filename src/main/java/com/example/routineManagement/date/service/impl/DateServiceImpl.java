@@ -1,5 +1,9 @@
 package com.example.routineManagement.date.service.impl;
 
+import com.example.routineManagement.comment.dto.CommentDto;
+import com.example.routineManagement.comment.entity.Comment;
+import com.example.routineManagement.comment.repository.CommentRepository;
+import com.example.routineManagement.date.dto.DateCommentDto;
 import com.example.routineManagement.date.dto.DateDto;
 import com.example.routineManagement.date.entity.Date;
 import com.example.routineManagement.date.repository.DateRepository;
@@ -24,6 +28,7 @@ import java.util.List;
 public class DateServiceImpl implements DateService {
     private final UserRepository userRepository;
     private final DateRepository dateRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     public DateDto.Response createDate(DateDto.Request request, HttpSession session) {
@@ -102,6 +107,7 @@ public class DateServiceImpl implements DateService {
     }
 
     @Override
+    @Transactional
     public void deleteDate(Long id, HttpSession session) {
         LoginDto.Response loginDto = (LoginDto.Response) session.getAttribute("loginUser");
 
@@ -117,5 +123,31 @@ public class DateServiceImpl implements DateService {
         }
 
         dateRepository.delete(date);
+    }
+
+    @Override
+    @Transactional
+    public DateCommentDto searchDateCommentById(Long id) {
+        Date date = dateRepository.findById(id).orElseThrow(() ->
+                new CustomException(ErrorCode.NOT_FOUND_ID));
+
+        DateDto.Response dateDto = DateDto.Response.fromEntity(date);
+
+        List<Comment> respList = commentRepository.findCommentByDateId(id);
+
+        List<CommentDto.Response> respDtoList = new ArrayList<>();
+
+        for (Comment comment : respList) {
+            respDtoList.add(CommentDto.Response.fromEntity(comment));
+        }
+
+        respDtoList.sort(Comparator.comparing(CommentDto.Response::getModifiedAt));
+
+        DateCommentDto dateCommentDto = DateCommentDto.builder()
+                .date(dateDto)
+                .comments(respDtoList)
+                .build();
+
+        return dateCommentDto;
     }
 }

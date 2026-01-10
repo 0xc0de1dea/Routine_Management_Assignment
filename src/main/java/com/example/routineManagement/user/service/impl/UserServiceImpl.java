@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public List<UserDto.Response> findAll() {
         List<User> list = userRepository.findAll();
         List<UserDto.Response> listResp = new ArrayList<>();

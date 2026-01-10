@@ -30,6 +30,13 @@ public class DateController {
         return ResponseEntity.ok(dateService.searchDateByAuthor(author));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> searchDateCommentById(
+            @PathVariable Long id
+    ){
+        return ResponseEntity.ok(dateService.searchDateCommentById(id));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateDate(
             @PathVariable Long id,
@@ -40,10 +47,12 @@ public class DateController {
     }
 
     @DeleteMapping
-    public void deleteDate(
+    public ResponseEntity<?> deleteDate(
             @RequestParam(name = "id") Long id,
             HttpSession session
     ){
         dateService.deleteDate(id, session);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

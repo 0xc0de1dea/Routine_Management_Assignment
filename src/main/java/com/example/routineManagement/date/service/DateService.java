@@ -1,5 +1,6 @@
 package com.example.routineManagement.date.service;
 
+import com.example.routineManagement.date.dto.DateCommentDto;
 import com.example.routineManagement.date.dto.DateDto;
 import jakarta.servlet.http.HttpSession;
 
@@ -15,4 +16,6 @@ public interface DateService {
     DateDto.Response updateDate(Long id, DateDto.Request request, HttpSession session);
 
     void deleteDate(Long id, HttpSession session);
+
+    DateCommentDto searchDateCommentById(Long id);
 }
