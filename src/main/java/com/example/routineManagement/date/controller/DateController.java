@@ -54,9 +54,9 @@ public class DateController {
         return ResponseEntity.ok(dateService.updateDate(id, request, session));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteDate(
-            @RequestParam(name = "id") Long id,
+            @PathVariable Long id,
             HttpSession session
     ){
         dateService.deleteDate(id, session);

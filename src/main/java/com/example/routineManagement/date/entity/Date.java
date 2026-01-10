@@ -1,5 +1,6 @@
 package com.example.routineManagement.date.entity;
 
+import com.example.routineManagement.comment.entity.Comment;
 import com.example.routineManagement.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,4 +30,11 @@ public class Date extends BaseEntity {
     private String content;
 
     private Long commentNum;
+
+    @OneToMany(
+            mappedBy = "date",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
+    private List<Comment> comments;
 }
