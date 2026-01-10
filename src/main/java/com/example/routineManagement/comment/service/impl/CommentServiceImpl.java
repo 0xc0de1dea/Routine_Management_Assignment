@@ -45,6 +45,8 @@ public class CommentServiceImpl implements CommentService {
                                         .date(date)
                                                 .build();
 
+        date.setCommentNum(date.getCommentNum() + 1);
+        dateRepository.save(date);
         comment.setModifiedAt(LocalDateTime.now());
         commentRepository.save(comment);
 
@@ -104,6 +106,10 @@ public class CommentServiceImpl implements CommentService {
             throw new CustomException(ErrorCode.INVALID_ACCESS);
         }
 
+        Date date = comment.getDate();
+        date.setCommentNum(date.getCommentNum() - 1);
+
+        dateRepository.save(date);
         commentRepository.delete(comment);
     }
 }

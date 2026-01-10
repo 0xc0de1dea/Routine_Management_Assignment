@@ -5,6 +5,7 @@ import com.example.routineManagement.comment.entity.Comment;
 import com.example.routineManagement.comment.repository.CommentRepository;
 import com.example.routineManagement.date.dto.DateCommentDto;
 import com.example.routineManagement.date.dto.DateDto;
+import com.example.routineManagement.date.dto.DatePageDto;
 import com.example.routineManagement.date.entity.Date;
 import com.example.routineManagement.date.repository.DateRepository;
 import com.example.routineManagement.date.service.DateService;
@@ -16,6 +17,10 @@ import com.example.routineManagement.user.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,9 +45,10 @@ public class DateServiceImpl implements DateService {
 
         Date date = Date.builder()
                         .user(user)
-                                .content(request.getContent())
-                                        .author(request.getAuthor())
-                                                .build();
+                                .title(request.getTitle())
+                                        .content(request.getContent())
+                                                .commentNum(0L)
+                                                        .build();
 
         date.setModifiedAt(LocalDateTime.now());
         dateRepository.save(date);
@@ -100,7 +106,7 @@ public class DateServiceImpl implements DateService {
             throw new CustomException(ErrorCode.INVALID_ACCESS);
         }
 
-        date.setAuthor(request.getAuthor());
+        date.setTitle(request.getTitle());
         date.setContent(request.getContent());
 
         return DateDto.Response.fromEntity(dateRepository.save(date));
@@ -149,5 +155,24 @@ public class DateServiceImpl implements DateService {
                 .build();
 
         return dateCommentDto;
+    }
+
+    @Override
+    public Page<DatePageDto> searchAll(int pageNo, int size) {
+        Pageable pageable = PageRequest.of(pageNo, size, Sort.by(Sort.Direction.DESC, "modifiedAt"));
+        Page<DatePageDto> page = dateRepository.findAll(pageable).map(
+                date -> DatePageDto.builder()
+                        .title(date.getTitle())
+                        .content(date.getContent())
+                        .commentNum(
+                                date.getCommentNum()
+                        )
+                        .author(date.getUser().getName())
+                        .createdAt(date.getCreatedAt())
+                        .modifiedAt(date.getModifiedAt())
+                        .build()
+        );
+
+        return page;
     }
 }

@@ -37,6 +37,14 @@ public class DateController {
         return ResponseEntity.ok(dateService.searchDateCommentById(id));
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<?> searchAll(
+            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo,
+            @RequestParam(required = false, defaultValue = "10", value = "size") int size
+    ){
+        return ResponseEntity.status(HttpStatus.OK).body(dateService.searchAll(pageNo, size));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateDate(
             @PathVariable Long id,

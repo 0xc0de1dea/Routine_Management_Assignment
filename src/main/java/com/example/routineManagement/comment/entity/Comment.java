@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "comments")
 @Entity
 public class Comment extends BaseEntity {
     @Id
