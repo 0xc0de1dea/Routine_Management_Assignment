@@ -91,3 +91,4 @@ src/
 https://documenter.getpostman.com/view/38015679/2sBXVfiBEQ
 
 # ERD
+<img width="875" height="439" alt="image" src="https://github.com/user-attachments/assets/0d892966-c859-4767-b0b8-a9553ffd90ae" />
